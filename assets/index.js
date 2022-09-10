@@ -1,6 +1,6 @@
  const timeEl = document.getElementById('time');
  const dateEl = document.getElementById('date');
- const currentWeatheritemsEl = document.getElementById('current-weather-item');
+ const currentWeatherItemsEl = document.getElementById('current-weather-item');
  const timezone = document.getElementById('time-zone');
  const stateEl = document.getElementById('country'); const weatherForecastEl = document.getElementById('weather-forecast');
  const currentTempEl = document.getElementById('current-temp');
@@ -26,56 +26,71 @@
 
  }, 1000);
 
-
+ getWeatherData()
  function getWeatherData() {
     navigator.geolocation.getCurrentPosition((success) => {
-        console.log(success);
+      console.log(success);
 
-        let {latitude, longitude} = success.coords;
+      let {latitude, longitude} = success.coords;
 
-        fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&appid=${API_KEY}`).then(res => res.json ()).then(data => {
-         console.log(data)
-
-        })
+      fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&appid=${API_KEY}`).then(res => res.json ()).then(data => {
+      
+      console.log(data)
+      showWeatherData(data);
+      })
     })
  }
 
  function showWeatherData (data){
    let {High, Low, Rain, Clouds, Wind_Speed, Sunrise, Sunset} = data.current;
 
-   currentWeatheritemsEl.innerHTML = 
-   `    <div class="weather-item">
-   <div>${High}</div>
-   <div>103&#176</div>
-</div>
-<div class="weather-item">
-   <div>${Low}</div>
-   <div>85&#176</div>
-</div>
-<div class="weather-item">
-   <div>${Rain}</div>
-   <div>0.02%</div>
-</div>
-<div class="weather-item">
-   <div>${Clouds}</div>
-   <div>9%</div>
-</div>
-<div class="weather-item">
-   <div>${Wind_Speed}</div>
-   <div>5mph</div>
-</div>
-<div class="weather-item">
-   <div>Sunrise</div>
-   <div>${window.Comment(Sunrise * 1000).format('HH:mm a')}</div>
-</div>
-<div class="weather-item">
-   <div>Sunset</div>
-   <div>${window.Comment(Sunset * 1000).format('HH:mm a')}</div>
-</div>
-
-
-
+   currentWeatherItemsEl.innerHTML = 
+      `<div class="weather-item">
+         <div>${High}</div>
+         <div>103&#176</div>
+      </div>
+      <div class="weather-item">
+         <div>${Low}</div>
+         <div>85&#176</div>
+      </div>
+      <div class="weather-item">
+         <div>${Rain}</div>
+         <div>0.02%</div>
+      </div>
+      <div class="weather-item">
+         <div>${Clouds}</div>
+         <div>9%</div>
+      </div>
+      <div class="weather-item">
+         <div>${Wind_Speed}</div>
+         <div>5mph</div>
+      </div>
+      <div class="weather-item">
+         <div>Sunrise</div>
+         <div>${window.Comment(Sunrise * 1000).format('HH:mm a')}</div>
+      </div>
+      <div class="weather-item">
+         <div>Sunset</div>
+         <div>${window.Comment(Sunset * 1000).format('HH:mm a')}</div>
+      </div>
 
 `;
 
- }
+let otherDayForecast = ''
+data.daily.forEach((day, idx) => {
+   if(idx == 0){
+
+   }else{
+      otherDayForecast += `
+         <div class="weather-forecast-item">
+            <div class="day">${window.moment(Sunset * 1000).format('ddd')}</div>
+            <img src=" http://openweathermap.org/img/wn/10d@2x.png" alt="weather icon" class="w-icon">
+            <div class="temp">Night - 91&#176; F</div>
+            <div class="temp">Day - 125&#176; F</div>  
+         </div>
+         `
+   
+   }
+})
+
+}
