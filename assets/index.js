@@ -2,9 +2,11 @@
  const dateEl = document.getElementById('date');
  const currentWeatherItemsEl = document.getElementById('current-weather-item');
  const timezone = document.getElementById('time-zone');
- const stateEl = document.getElementById('country'); const weatherForecastEl = document.getElementById('weather-forecast');
+ const stateEl = document.getElementById('state'); 
+ const weatherForecastEl = document.getElementById('weather-forecast');
  const currentTempEl = document.getElementById('current-temp');
 
+ 
  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -33,7 +35,7 @@
 
       let {latitude, longitude} = success.coords;
 
-      fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&appid=${API_KEY}`).then(res => res.json ()).then(data => {
+      fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&appid=${API_KEY}`).then(res => res.json ()).then(data => {
       
       console.log(data)
       showWeatherData(data);
@@ -42,28 +44,28 @@
  }
 
  function showWeatherData (data){
-   let {High, Low, Rain, Clouds, Wind_Speed, Sunrise, Sunset} = data.current;
+   let {Humidity, Low, Rain, Clouds, Wind_Speed, Sunrise, Sunset} = data.current;
 
    currentWeatherItemsEl.innerHTML = 
       `<div class="weather-item">
-         <div>${High}</div>
-         <div>103&#176</div>
+         <div>Humidity</div>
+         <div>${Humidity}</div>
       </div>
       <div class="weather-item">
+         <div>Low</div>
          <div>${Low}</div>
-         <div>85&#176</div>
       </div>
       <div class="weather-item">
+         <div>Rain</div>
          <div>${Rain}</div>
-         <div>0.02%</div>
       </div>
       <div class="weather-item">
+         <div>Clouds</div>
          <div>${Clouds}</div>
-         <div>9%</div>
       </div>
       <div class="weather-item">
+         <div>Wind_Speed</div>
          <div>${Wind_Speed}</div>
-         <div>5mph</div>
       </div>
       <div class="weather-item">
          <div>Sunrise</div>
@@ -72,9 +74,7 @@
       <div class="weather-item">
          <div>Sunset</div>
          <div>${window.Comment(Sunset * 1000).format('HH:mm a')}</div>
-      </div>
-
-`;
+      </div>`;
 
 let otherDayForecast = ''
 data.daily.forEach((day, idx) => {
